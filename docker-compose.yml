@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  database:
+    image: postgres
+    container_name: task_manager_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Aishveer@21
+      POSTGRES_DB: task_manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: task_manager_api
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+    environment:
+      PORT: 5000
+      DATABASE_URL: postgresql://postgres:Aishveer@21@localhost:5432/task_manager
+      JWT_SECRET: c8e88d4f155376576b662f36533dd5bc2dfb723c443c51e55e289da0910fd063
+    command: ["node", "index.js"]
+
+volumes:
+  postgres_data:
